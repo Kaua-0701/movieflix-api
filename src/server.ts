@@ -6,7 +6,7 @@ const port = 3000;
 const app = express();
 const prisma = new PrismaClient();
 
-app.use(express.json()); 
+app.use(express.json());
 
 app.get('/movies', async (_, res) => {
     const movies = await prisma.movie.findMany({
@@ -21,13 +21,29 @@ app.post('/movies', async (req, res) => {
         req.body;
 
     try {
+        // case insensitive - Se a busca for feita por john wick ou John Wick ou JOHN WICK. O registro vai ser retornado na consulta.
+
+        // case sensitive - Se a busca por john wick e no banco estiver como John Wick, o registro não será retornado na consulta.
+
+        const movieWithSameTitle = await prisma.movie.findFirst({
+            where: { title: { equals: title, mode: 'insensitive' } },
+        });
+
+        if (movieWithSameTitle) {
+            return res
+                .status(409)
+                .send({
+                    message: 'Já existe um filme cadastrado com esse título',
+                });
+        }
+
         await prisma.movie.create({
             data: {
-                title, 
-                genre_id, 
-                language_id, 
-                oscar_count, 
-                release_date: new Date(release_date), 
+                title,
+                genre_id,
+                language_id,
+                oscar_count,
+                release_date: new Date(release_date),
             },
         });
     } catch (error) {
