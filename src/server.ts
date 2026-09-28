@@ -21,9 +21,6 @@ app.post('/movies', async (req, res) => {
         req.body;
 
     try {
-        // case insensitive - Se a busca for feita por john wick ou John Wick ou JOHN WICK. O registro vai ser retornado na consulta.
-
-        // case sensitive - Se a busca por john wick e no banco estiver como John Wick, o registro não será retornado na consulta.
 
         const movieWithSameTitle = await prisma.movie.findFirst({
             where: { title: { equals: title, mode: 'insensitive' } },
