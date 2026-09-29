@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
+// - LISTAGEM DE FILMES
 app.get('/movies', async (_, res) => {
     const movies = await prisma.movie.findMany({
         orderBy: { title: 'asc' },
@@ -15,13 +16,19 @@ app.get('/movies', async (_, res) => {
     res.json(movies);
 });
 
+// - CADASTRO DE FILMES
 app.post('/movies', async (req, res) => {
     const { title, genre_id, language_id, oscar_count, release_date } =
         req.body;
 
     try {
         const movieWithSameTitle = await prisma.movie.findFirst({
-            where: { title: { equals: title, mode: 'insensitive' } },
+            where: {
+                title: {
+                    equals: title,
+                    mode: 'insensitive',
+                },
+            },
         });
 
         if (movieWithSameTitle) {
@@ -43,10 +50,10 @@ app.post('/movies', async (req, res) => {
         res.status(500).send({ message: 'Falha ao cadastrar o filme' });
     }
 
-    res.status(201).send();
+    res.status(201).send({ message: 'Filme cadastrado com sucesso!' });
 });
 
-// PARTE 2
+// - ATUALIZAÇÃO DE FILMES
 app.put('/movies/:id', async (req, res) => {
     const id = Number(req.params.id);
 
@@ -79,6 +86,7 @@ app.put('/movies/:id', async (req, res) => {
     res.status(200).send({ message: 'Filme atualizado com sucesso!' });
 });
 
+// - REMOÇÃO DE FILMES
 app.delete('/movies/:id', async (req, res) => {
     const id = Number(req.params.id);
 
@@ -90,14 +98,41 @@ app.delete('/movies/:id', async (req, res) => {
         }
 
         await prisma.movie.delete({ where: { id } });
-
     } catch (error) {
         res.status(500).send({ message: 'Não foi possível remover o filme' });
     }
 
-    res.status(200).send({ message: 'Filme deletado com sucesso!'});
+    res.status(200).send({ message: 'Filme deletado com sucesso!' });
 });
 
+// - FILTRAR FILMES POR GÊNERO
+app.get('/movies/:genreName', async (req, res) => {
+
+    try {
+        const moviesFilteredByGenreName = await prisma.movie.findMany({
+            include: {
+                genres: true,
+                languages: true,
+            },
+
+            where: {
+                genres: {
+                    name: {
+                        equals: req.params.genreName,
+                        mode: 'insensitive', 
+                    },
+                },
+            },
+        });
+
+        res.status(200).send(moviesFilteredByGenreName);
+
+    } catch (error) {
+        return res.status(500).send({ message: 'Falhar ao fazer a filtragem' }); 
+    }
+});
+
+// - RODAR SERVIDOR
 app.listen(port, () => {
     console.log(`Servidor em execução na porta ${port}`);
 });
