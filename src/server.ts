@@ -47,7 +47,7 @@ app.post('/movies', async (req, res) => {
             },
         });
     } catch (error) {
-        res.status(500).send({ message: 'Falha ao cadastrar o filme' });
+       return res.status(500).send({ message: 'Falha ao cadastrar o filme' });
     }
 
     res.status(201).send({ message: 'Filme cadastrado com sucesso!' });
@@ -99,7 +99,7 @@ app.delete('/movies/:id', async (req, res) => {
 
         await prisma.movie.delete({ where: { id } });
     } catch (error) {
-        res.status(500).send({ message: 'Não foi possível remover o filme' });
+        return res.status(500).send({ message: 'Não foi possível remover o filme' });
     }
 
     res.status(200).send({ message: 'Filme deletado com sucesso!' });
@@ -128,7 +128,7 @@ app.get('/movies/:genreName', async (req, res) => {
         res.status(200).send(moviesFilteredByGenreName);
 
     } catch (error) {
-        return res.status(500).send({ message: 'Falhar ao fazer a filtragem' }); 
+        return res.status(500).send({ message: 'Falha ao fazer a filtragem' }); 
     }
 });
 
