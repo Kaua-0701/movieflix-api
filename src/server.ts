@@ -36,7 +36,7 @@ app.post('/movies', async (req, res) => {
 
         if (movieWithSameTitle) {
             return res.status(409).send({
-                message: 'Já existe um filme cadastrado com esse título',
+                message: 'Já existe um filme cadastrado com esse título.',
             });
         }
 
@@ -50,7 +50,7 @@ app.post('/movies', async (req, res) => {
             },
         });
     } catch (error) {
-       return res.status(500).send({ message: 'Falha ao cadastrar o filme' });
+       return res.status(500).send({ message: 'Falha ao cadastrar o filme.' });
     }
 
     res.status(201).send({ message: 'Filme cadastrado com sucesso!' });
@@ -66,7 +66,7 @@ app.put('/movies/:id', async (req, res) => {
         });
 
         if (!movie) {
-            return res.status(404).send({ message: 'Filme não encontrado' });
+            return res.status(404).send({ message: 'Filme não encontrado.' });
         }
 
         const data = { ...req.body };
@@ -83,7 +83,7 @@ app.put('/movies/:id', async (req, res) => {
     } catch (error) {
         return res
             .status(500)
-            .send({ message: 'Falha ao atualizar o registro' });
+            .send({ message: 'Falha ao atualizar o registro do filme.' });
     }
 
     res.status(200).send({ message: 'Filme atualizado com sucesso!' });
@@ -97,12 +97,12 @@ app.delete('/movies/:id', async (req, res) => {
         const movie = await prisma.movie.findUnique({ where: { id } });
 
         if (!movie) {
-            return res.status(404).send({ message: 'Filme não encontrado' });
+            return res.status(404).send({ message: 'O filme não foi encontrado.' });
         }
 
         await prisma.movie.delete({ where: { id } });
     } catch (error) {
-        return res.status(500).send({ message: 'Não foi possível remover o filme' });
+        return res.status(500).send({ message: 'Não foi possível remover o filme.' });
     }
 
     res.status(200).send({ message: 'Filme deletado com sucesso!' });
@@ -131,7 +131,7 @@ app.get('/movies/:genreName', async (req, res) => {
         res.status(200).send(moviesFilteredByGenreName);
 
     } catch (error) {
-        return res.status(500).send({ message: 'Falha ao fazer a filtragem' }); 
+        return res.status(500).send({ message: 'Falha ao fazer a filtragem.' }); 
     }
 });
 
