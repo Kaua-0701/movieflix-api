@@ -25,6 +25,31 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": ["Movie"],
+                "summary": "Cadastrar um filme.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Filme cadastrado com sucesso!"
+                    },
+                    "409": {
+                        "description": "Já existe um filme cadastrado com esse título."
+                    },
+                    "500": {
+                        "description": "Falha ao cadastrar o filme."
+                    }
+                }
             }
         },
         "/movies/{id}": {
@@ -36,7 +61,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "description": "ID do filme a ser atualizado.",
+                        "description": "ID do filme a ser atualizado:",
                         "schema": {
                             "type": "integer"
                         }
@@ -72,7 +97,7 @@
                         "name": "id",
                         "in": "path",
                         "required": true,
-                        "description": "ID do filme a ser removido.",
+                        "description": "ID do filme a ser removido:",
                         "schema": {
                             "type": "integer"
                         }
@@ -88,9 +113,44 @@
                     "500": {
                         "description": "Não foi possível remover o filme."
                     }
-                } 
+                }
             }
-        }       
+        },
+        "/movies/{genreName}": {
+            "get": {
+                "tags": ["Movie"],
+                "summary": "Filtrar filmes por gênero.",
+                "parameters": [
+                    {
+                        "name": "genreName",
+                        "in": "path",
+                        "required": true,
+                        "description": "Nome do gênero:",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filtragem do gênero realizada!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Movie"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Falha ao fazer a filtragem do gênero."
+                    }
+                }
+            }
+        }
     },
     "components": {
         "schemas": {
