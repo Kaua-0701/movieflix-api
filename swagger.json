@@ -110,7 +110,7 @@
                         "description": "Filme deletado com sucesso!"
                     },
                     "404": {
-                        "description": "O filme não foi encontrado."
+                        "description": "Filme não encontrado."
                     },
                     "500": {
                         "description": "Não foi possível remover o filme."

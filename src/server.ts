@@ -37,12 +37,10 @@ app.post('/movies', async (req, res) => {
 
     // Validação do campo obrigatório
     if (!isValidMovieTitle(title)) {
-        return res
-            .status(400)
-            .send({
-                message:
-                    'O campo "title" é obrigatório e não pode ser apenas "string".',
-            });
+        return res.status(400).send({
+            message:
+                'O campo "title" é obrigatório e não pode ser apenas "string".',
+        });
     }
 
     try {
@@ -155,16 +153,14 @@ app.delete('/movies/:id', async (req, res) => {
         const movie = await prisma.movie.findUnique({ where: { id } });
 
         if (!movie) {
-            return res
-                .status(404)
-                .send({ message: 'O filme não foi encontrado.' });
+            return res.status(404).send({ message: 'Filme não encontrado' });
         }
 
         await prisma.movie.delete({ where: { id } });
     } catch (error) {
         return res
             .status(500)
-            .send({ message: 'Não foi possível remover o filme.' });
+            .send({ message: 'Não foi possível remover o filme' });
     }
 
     res.status(200).send({ message: 'Filme deletado com sucesso!' });
