@@ -8,25 +8,26 @@ datasource db {
 }
 
 model Genre {
-  id     Int      @id @default(autoincrement())
-  name   String?  @db.VarChar(100)
+  id     Int     @id @default(autoincrement())
+  name   String? @db.VarChar(100)
   movies Movie[]
 
-  @@map("genres") 
+  @@map("genres")
 }
 
 model Language {
-  id     Int      @id @default(autoincrement())
-  name   String?  @db.VarChar(100)
+  id     Int     @id @default(autoincrement())
+  name   String? @db.VarChar(100)
   movies Movie[]
 
   @@map("languages")
 }
 
 model Movie {
-  id           Int        @id @default(autoincrement())
-  title        String?    @db.VarChar(100)
-  release_date DateTime?  @db.Date
+  id           Int       @id @default(autoincrement())
+  title        String?   @db.VarChar(100)
+  director     String?   @default("Desconhecido") @db.VarChar(100)
+  release_date DateTime? @db.Date
   genre_id     Int?
   language_id  Int?
   oscar_count  Int?

@@ -12,17 +12,7 @@
                 "summary": "Obter todos os filmes.",
                 "responses": {
                     "200": {
-                        "description": "Retorna uma lista de filmes.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Movie"
-                                    }
-                                }
-                            }
-                        }
+                        "description": "Retorna uma lista de filmes."
                     }
                 }
             },
@@ -40,6 +30,9 @@
                     }
                 },
                 "responses": {
+                    "400": {
+                        "description": "O campo \"title\" é obrigatório, não pode estar vazio nem ser apenas \"string\"."
+                    },
                     "201": {
                         "description": "Filme cadastrado com sucesso!"
                     },
@@ -72,7 +65,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MovieInput"
+                                "$ref": "#/components/schemas/MovieUpdateInput"
                             }
                         }
                     }
@@ -81,8 +74,14 @@
                     "200": {
                         "description": "Filme atualizado com sucesso!"
                     },
+                    "400": {
+                        "description": "ID inválido ou título vazio/inválido."
+                    },
                     "404": {
                         "description": "Filme não encontrado."
+                    },
+                    "409": {
+                        "description": "Já existe um filme cadastrado com esse título."
                     },
                     "500": {
                         "description": "Falha ao atualizar o registro do filme."
@@ -104,6 +103,9 @@
                     }
                 ],
                 "responses": {
+                    "400": {
+                        "description": "ID inválido."
+                    },
                     "200": {
                         "description": "Filme deletado com sucesso!"
                     },
@@ -133,17 +135,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Filtragem do gênero realizada!",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Movie"
-                                    }
-                                }
-                            }
-                        }
+                        "description": "Filtragem do gênero realizada!"
                     },
                     "500": {
                         "description": "Falha ao fazer a filtragem do gênero."
@@ -164,6 +156,15 @@
                     "title": {
                         "type": "string",
                         "description": "Título do filme."
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "Diretor do filme."
+                    },
+                    "release_date": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Data de lançamento do filme."
                     },
                     "genre_id": {
                         "type": "integer",
@@ -202,27 +203,27 @@
                     "oscar_count": {
                         "type": "integer",
                         "description": "Quantidade de Oscars que o filme recebeu."
-                    },
-                    "release_date": {
-                        "type": "string",
-                        "format": "date",
-                        "description": "Data de lançamento do filme."
                     }
                 }
             },
             "MovieInput": {
                 "type": "object",
                 "required": [
-                    "title",
-                    "genre_id",
-                    "language_id",
-                    "oscar_count",
-                    "release_date"
+                    "title"
                 ],
                 "properties": {
                     "title": {
                         "type": "string",
-                        "description": "Título do filme."
+                        "description": "Título do filme."               
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "Diretor do filme."
+                    },
+                    "release_date": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Data de lançamento do filme."
                     },
                     "genre_id": {
                         "type": "integer",
@@ -235,11 +236,37 @@
                     "oscar_count": {
                         "type": "integer",
                         "description": "Quantidade de Oscars que o filme recebeu."
+                    }
+                }
+            },
+            "MovieUpdateInput": {
+                "type": "object",
+                "description": "Campos opcionais para atualização parcial do filme.",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Título do filme."
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "Diretor do filme."
                     },
                     "release_date": {
                         "type": "string",
                         "format": "date",
                         "description": "Data de lançamento do filme."
+                    },
+                    "genre_id": {
+                        "type": "integer",
+                        "description": "ID do gênero do filme."
+                    },
+                    "language_id": {
+                        "type": "integer",
+                        "description": "ID do idioma do filme."
+                    },
+                    "oscar_count": {
+                        "type": "integer",
+                        "description": "Quantidade de Oscars que o filme recebeu."
                     }
                 }
             }
